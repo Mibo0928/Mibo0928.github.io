@@ -120,14 +120,41 @@ const leaves = [
   { dx: -22, dy: -12, rx: 7, ry: 16, rot: -58 },
   { dx: 20, dy: -14, rx: 7, ry: 16, rot: 56 },
 ];
-const chair = [
-  ...box(2.3, 7.7, 0, 2, 2, 0.75, blushBox, 9),
-  ...box(2.3, 7.7, 0.75, 0.55, 2, 1.95, blushBox, 11),
-  ...box(2.3, 7.7, 0.75, 2.05, 0.5, 0.95, blushBox, 10),
-  ...box(2.85, 8.2, 0.75, 1.45, 1.05, 0.38, { top: '#fbe5e7', right: '#f4cdd3', left: '#e9b6be' }, 10),
-  ...box(2.3, 9.2, 0.75, 2.05, 0.5, 0.95, blushBox, 10),
+// 沙發：整張椅子只畫一條外輪廓（圓角），裡面的椅背、扶手、坐墊用細縫線分開。
+// 每一塊都是銳利的方塊，所以接縫一定對齊；只有最外面的輪廓是圓的。
+const sharpBox = (x: number, y: number, z: number, dx: number, dy: number, dz: number, c: Shade) => {
+  const [x1, y1, z1] = [x + dx, y + dy, z + dz];
+  return [
+    { d: pts([[x1, y, z], [x1, y1, z], [x1, y1, z1], [x1, y, z1]]), fill: c.right },
+    { d: pts([[x, y1, z], [x1, y1, z], [x1, y1, z1], [x, y1, z1]]), fill: c.left },
+    { d: pts([[x, y, z1], [x1, y, z1], [x1, y1, z1], [x, y1, z1]]), fill: c.top },
+  ];
+};
+const cushionShade: Shade = { top: '#fbe5e7', right: '#f4cdd3', left: '#e9b6be' };
+// 尺寸：椅子佔 x 2.3–4.3、y 7.7–9.7；椅背厚 0.6、高 2.6；扶手寬 0.5、高 1.55
+const CH = { x0: 2.3, x1: 4.3, y0: 7.7, y1: 9.7, back: 0.6, backH: 2.6, arm: 0.5, armH: 1.55, seatH: 0.75, cushionH: 0.32 };
+const chairFaces = [
+  ...sharpBox(CH.x0, CH.y0, 0, CH.back, CH.y1 - CH.y0, CH.backH, blushBox),
+  ...sharpBox(CH.x0 + CH.back, CH.y0, 0, CH.x1 - CH.x0 - CH.back, CH.arm, CH.armH, blushBox),
+  ...sharpBox(CH.x0 + CH.back, CH.y0 + CH.arm, 0, CH.x1 - CH.x0 - CH.back, CH.y1 - CH.y0 - 2 * CH.arm, CH.seatH, blushBox),
+  ...sharpBox(CH.x0 + CH.back, CH.y0 + CH.arm, CH.seatH, CH.x1 - CH.x0 - CH.back, CH.y1 - CH.y0 - 2 * CH.arm, CH.cushionH, cushionShade),
+  ...sharpBox(CH.x0 + CH.back, CH.y1 - CH.arm, 0, CH.x1 - CH.x0 - CH.back, CH.arm, CH.armH, blushBox),
 ];
-const [cushX, cushY] = p([3.6, 8.75, 1.13]);
+const chairOutline = rounded(
+  (
+    [
+      [CH.x0, CH.y0, CH.backH],
+      [CH.x0 + CH.back, CH.y0, CH.backH],
+      [CH.x0 + CH.back, CH.y0, CH.armH],
+      [CH.x1, CH.y0, CH.armH],
+      [CH.x1, CH.y0, 0],
+      [CH.x1, CH.y1, 0],
+      [CH.x0, CH.y1, 0],
+      [CH.x0, CH.y1, CH.backH],
+    ] as P3[]
+  ).map(p),
+  9,
+);
 // ---- 作品物件 ----
 // 電腦桌
 const desk = [
@@ -356,8 +383,11 @@ const stroke = { stroke: '#7a5f43', 'stroke-width': 1.4, 'stroke-linejoin': 'rou
     </Obj>
 
     <!-- 粉紅沙發（擺設） -->
-    <g {...stroke}>{chair.map((f) => <path d={f.d} fill={f.fill} />)}</g>
-    <path d={`M${cushX - 16} ${cushY + 2}q10 -7 22 -3`} stroke="#fffaf1" stroke-width="3" stroke-linecap="round" fill="none" />
+    <clipPath id="chair-clip"><path d={chairOutline} /></clipPath>
+    <g clip-path="url(#chair-clip)" stroke="#c48d96" stroke-width="1.2" stroke-linejoin="round">
+      {chairFaces.map((f) => <polygon points={f.d} fill={f.fill} />)}
+    </g>
+    <path d={chairOutline} fill="none" {...stroke} />
 
     <!-- 茶几與筆記本 -->
     <Obj slot="notebook" work={bySlot.get('notebook')} i={4}>
