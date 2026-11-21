@@ -1,0 +1,163 @@
+@import '@fontsource/noto-serif-tc/700.css';
+@import '@fontsource/noto-serif-tc/900.css';
+@import '@fontsource/huninn/400.css';
+
+:root {
+  color-scheme: light;
+
+  /* 紙與牆 */
+  --porcelain: #fffaf1;
+  --oat: #fbf3e6;
+  --oat-flour: #efe2cc;
+  --line: #e0cfb4;
+
+  /* 房間的四個顏色 */
+  --sage: #a9c4b1;
+  --moss: #dce8df;
+  --sage-deep: #4f6e59;
+  --blush: #f5c9cf;
+  --blush-soft: #fbe5e7;
+  --blush-deep: #94434f;
+  --rain: #b7c7d6;
+  --rain-soft: #e3eaf1;
+  --rain-deep: #4d6680;
+  --acorn: #8b6f4e;
+
+  /* 墨色 */
+  --ink: #45362a;
+  --ink-soft: #6b5746;
+  --ink-faint: #75604e;
+
+  --font-display: 'Noto Serif TC', 'Songti TC', serif;
+  --font-body: 'Huninn', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+
+  --shadow-soft: 0 6px 18px -8px rgb(92 66 40 / 0.28);
+  --shadow-lift: 0 14px 28px -12px rgb(92 66 40 / 0.4);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--oat);
+  scrollbar-color: var(--sage) var(--oat);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 1px 1px, rgb(139 111 78 / 0.09) 1px, transparent 0) 0 0 / 22px 22px,
+    var(--oat);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  caret-color: var(--blush-deep);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--blush);
+  color: var(--ink);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 1.2;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--sage);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
+}
+
+:focus-visible {
+  outline: 3px solid var(--sage-deep);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.wrap {
+  width: min(100% - 2rem, 1320px);
+  margin-inline: auto;
+}
+
+/* 標示佔位內容的小標籤 */
+.sample {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1;
+  padding: 0.3em 0.6em;
+  border-radius: 999px;
+  background: var(--blush-soft);
+  color: var(--blush-deep);
+  border: 1px solid var(--blush);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.dotted-rule {
+  border: 0;
+  height: 2px;
+  margin: 0;
+  background: radial-gradient(circle, var(--line) 1px, transparent 1.5px) 0 0 / 8px 2px repeat-x;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

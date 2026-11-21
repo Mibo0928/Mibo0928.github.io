@@ -1,0 +1,21 @@
+---
+// 房間裡的一個物件。有分配到作品就變成可以點的連結（鍵盤焦點交給名牌，所以這裡不能用 Tab 選到）。
+interface Props {
+  slot: string;
+  work?: { href: string; title: string };
+  i: number;
+}
+const { slot, work, i } = Astro.props;
+---
+
+{work ? (
+  <a href={work.href} class="obj-link" tabindex="-1" aria-hidden="true">
+    <g class="obj" data-slot={slot} style={`--i:${i}`}>
+      <slot />
+    </g>
+  </a>
+) : (
+  <g class="obj obj-decor" data-slot={slot} style={`--i:${i}`}>
+    <slot />
+  </g>
+)}

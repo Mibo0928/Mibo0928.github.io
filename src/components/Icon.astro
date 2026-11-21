@@ -1,0 +1,77 @@
+---
+// 網站用的線條圖示：同一種線寬、圓角端點，顏色跟著文字顏色。
+interface Props {
+  name: 'home' | 'works' | 'diary' | 'sunny' | 'cloudy' | 'rainy' | 'partly' | 'arrow' | 'external' | 'code';
+  size?: number;
+  label?: string;
+}
+const { name, size = 20, label } = Astro.props;
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+>
+  {name === 'home' && (
+    <>
+      <path d="M4 10.5 12 4l8 6.5" />
+      <path d="M6 9v10.5h12V9" />
+      <path d="M10 19.5v-5h4v5" />
+    </>
+  )}
+  {name === 'works' && (
+    <>
+      <rect x="3.5" y="5" width="17" height="11.5" rx="2" />
+      <path d="M9 20h6M12 16.5V20" />
+      <path d="m8.5 9.5-2 1.75 2 1.75M15.5 9.5l2 1.75-2 1.75" />
+    </>
+  )}
+  {name === 'diary' && (
+    <>
+      <path d="M5.5 4.5h11a2 2 0 0 1 2 2v13h-11a2 2 0 0 1-2-2z" />
+      <path d="M5.5 17.5a2 2 0 0 1 2-2h11" />
+      <path d="M9 8.5h6M9 11.5h4" />
+    </>
+  )}
+  {name === 'sunny' && (
+    <>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+    </>
+  )}
+  {name === 'cloudy' && <path d="M7 18.5h10a4 4 0 0 0 .6-7.95A5.5 5.5 0 0 0 7.1 9.6 4.5 4.5 0 0 0 7 18.5z" />}
+  {name === 'rainy' && (
+    <>
+      <path d="M7 15h10a3.75 3.75 0 0 0 .55-7.46A5.25 5.25 0 0 0 7.5 6.6 4.2 4.2 0 0 0 7 15z" />
+      <path d="M8.5 18v2M12 18.5v2M15.5 18v2" />
+    </>
+  )}
+  {name === 'partly' && (
+    <>
+      <path d="M9 4v1.5M4.5 8.5H3M5.8 5.3l1 1M13.4 5.3l-1 1" />
+      <path d="M6.3 11a3.5 3.5 0 0 1 6.4-2.6" />
+      <path d="M8 19.5h9a3.5 3.5 0 0 0 .5-6.96 4.75 4.75 0 0 0-9.1-.84A3.9 3.9 0 0 0 8 19.5z" />
+    </>
+  )}
+  {name === 'arrow' && <path d="M5 12h14M13 6l6 6-6 6" />}
+  {name === 'external' && (
+    <>
+      <path d="M14 4.5h5.5V10M19.5 4.5 11 13" />
+      <path d="M17 14v4.5a1 1 0 0 1-1 1H5.5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1H10" />
+    </>
+  )}
+  {name === 'code' && (
+    <>
+      <path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5.5l-3 13" />
+    </>
+  )}
+</svg>

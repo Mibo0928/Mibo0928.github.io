@@ -1,0 +1,170 @@
+---
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import site from '../site.json';
+
+interface Props {
+  title?: string;
+  description?: string;
+  current?: 'home' | 'works' | 'diary';
+}
+const { title, description = site.intro, current } = Astro.props;
+const pageTitle = title ? `${title}｜${site.name}` : `${site.name}的小房間`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const nav = [
+  { key: 'home', href: `${base}/`, label: '房間', icon: 'home' },
+  { key: 'works', href: `${base}/works/`, label: '作品', icon: 'works' },
+  { key: 'diary', href: `${base}/diary/`, label: '日記', icon: 'diary' },
+] as const;
+const hasContact = Boolean(site.contact.email || site.contact.github);
+---
+
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#fbf3e6" />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+  </head>
+  <body>
+    <a class="skip" href="#main">跳到主要內容</a>
+    <header class="topbar wrap">
+      <a class="home-link" href={`${base}/`}>{site.name}</a>
+      <nav aria-label="主選單">
+        <ul>
+          {nav.map((item) => (
+            <li>
+              <a href={item.href} aria-current={current === item.key ? 'page' : undefined}>
+                <Icon name={item.icon} size={18} />
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="footer wrap">
+      <hr class="dotted-rule" />
+      <div class="footer-row">
+        <p>© {new Date().getFullYear()} {site.name}</p>
+        {hasContact && (
+          <ul class="contact">
+            {site.contact.email && <li><a href={`mailto:${site.contact.email}`}>Email</a></li>}
+            {site.contact.github && <li><a href={site.contact.github}>GitHub</a></li>}
+          </ul>
+        )}
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 10;
+    padding: var(--space-2) var(--space-4);
+    background: var(--porcelain);
+    border: 2px solid var(--sage-deep);
+    border-radius: var(--radius-s);
+  }
+  .skip:focus {
+    top: 1rem;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+  }
+
+  .home-link {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.125rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  nav ul {
+    display: flex;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.45em 1em;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    background: var(--porcelain);
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    transition:
+      border-color 0.2s var(--ease-out),
+      color 0.2s var(--ease-out),
+      background 0.2s var(--ease-out);
+  }
+
+  nav a:hover {
+    border-color: var(--sage);
+    color: var(--ink);
+  }
+
+  nav a[aria-current='page'] {
+    background: var(--moss);
+    border-color: var(--sage);
+    color: var(--sage-deep);
+  }
+
+  .footer {
+    padding-block: var(--space-8) var(--space-6);
+    color: var(--ink-faint);
+    font-size: 0.875rem;
+  }
+
+  .footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-top: var(--space-5);
+  }
+
+  .contact {
+    display: flex;
+    gap: var(--space-5);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (max-width: 560px) {
+    .topbar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+      padding-block: var(--space-4);
+    }
+    nav a {
+      padding: 0.4em 0.85em;
+    }
+  }
+</style>

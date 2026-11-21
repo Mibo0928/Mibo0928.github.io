@@ -1,0 +1,499 @@
+---
+// 首頁的等角小房間。房間裡的物件就是作品：作品的 roomObject 決定它放在哪裡。
+// 沒有分配到作品的物件只當作擺設，不能點。
+import { roomObjects } from '../content.config';
+import Obj from './RoomObj.astro';
+
+type Slot = (typeof roomObjects)[number];
+export interface RoomWork {
+  id: string;
+  title: string;
+  href: string;
+  tech: string[];
+  year: number;
+  slot: Slot;
+  placeholder: boolean;
+}
+interface Props {
+  works: RoomWork[];
+}
+const { works } = Astro.props;
+const bySlot = new Map<Slot, RoomWork>(works.map((w) => [w.slot, w]));
+
+// ---- 等角投影 ----
+const S = 34; // 每單位的像素
+const CX = 330;
+const CY = 300;
+const VW = 660;
+const VH = 670;
+const H = 8; // 牆高
+const C30 = 0.8660254;
+type P3 = [number, number, number];
+const p = ([x, y, z]: P3): [number, number] => [CX + (x - y) * C30 * S, CY + (x + y) * 0.5 * S - z * S];
+const pts = (list: P3[]) => list.map((q) => p(q).map((n) => n.toFixed(1)).join(',')).join(' ');
+
+interface Shade {
+  top: string;
+  right: string;
+  left: string;
+}
+// 圓角多邊形：讓家具的邊角柔和一點（貼紙感）
+const rounded = (corners: [number, number][], r: number) => {
+  const n = corners.length;
+  let d = '';
+  for (let i = 0; i < n; i++) {
+    const [px, py] = corners[(i - 1 + n) % n];
+    const [cx, cy] = corners[i];
+    const [nx, ny] = corners[(i + 1) % n];
+    const la = Math.hypot(px - cx, py - cy);
+    const lb = Math.hypot(nx - cx, ny - cy);
+    const ra = Math.min(r, la / 2.2);
+    const rb = Math.min(r, lb / 2.2);
+    const a = [cx + ((px - cx) / la) * ra, cy + ((py - cy) / la) * ra];
+    const b = [cx + ((nx - cx) / lb) * rb, cy + ((ny - cy) / lb) * rb];
+    d += `${i === 0 ? 'M' : 'L'}${a[0].toFixed(1)} ${a[1].toFixed(1)}Q${cx.toFixed(1)} ${cy.toFixed(1)} ${b[0].toFixed(1)} ${b[1].toFixed(1)}`;
+  }
+  return d + 'Z';
+};
+// 一個方塊：看得到上面、右面（x 最大）、左面（y 最大）；r 是圓角大小
+const box = (x: number, y: number, z: number, dx: number, dy: number, dz: number, c: Shade, r = 2.5) => {
+  const [x1, y1, z1] = [x + dx, y + dy, z + dz];
+  const face = (list: P3[]) => rounded(list.map(p), r);
+  return [
+    { d: face([[x1, y, z], [x1, y1, z], [x1, y1, z1], [x1, y, z1]]), fill: c.right },
+    { d: face([[x, y1, z], [x1, y1, z], [x1, y1, z1], [x, y1, z1]]), fill: c.left },
+    { d: face([[x, y, z1], [x1, y, z1], [x1, y1, z1], [x, y1, z1]]), fill: c.top },
+  ];
+};
+// 圓柱（花盆）：x、y 是底部中心
+const cylinder = (x: number, y: number, z: number, radius: number, h: number) => {
+  const [bx, by] = p([x, y, z]);
+  const [tx, ty] = p([x, y, z + h]);
+  const rx = radius * S * 1.2247;
+  const ry = radius * S * 0.7071;
+  const brx = rx * 0.82;
+  const bry = ry * 0.82;
+  const body = `M${(tx - rx).toFixed(1)} ${ty.toFixed(1)}L${(bx - brx).toFixed(1)} ${by.toFixed(1)}A${brx.toFixed(1)} ${bry.toFixed(1)} 0 0 0 ${(bx + brx).toFixed(1)} ${by.toFixed(1)}L${(tx + rx).toFixed(1)} ${ty.toFixed(1)}Z`;
+  return { body, top: { cx: tx, cy: ty, rx, ry } };
+};
+// 牆面（x 固定）與（y 固定）上的長方形
+const onX = (x: number, y0: number, y1: number, z0: number, z1: number) =>
+  pts([[x, y0, z0], [x, y1, z0], [x, y1, z1], [x, y0, z1]]);
+const onY = (y: number, x0: number, x1: number, z0: number, z1: number) =>
+  pts([[x0, y, z0], [x1, y, z0], [x1, y, z1], [x0, y, z1]]);
+const onZ = (z: number, x0: number, x1: number, y0: number, y1: number) =>
+  pts([[x0, y0, z], [x1, y0, z], [x1, y1, z], [x0, y1, z]]);
+const line = (a: P3, b: P3) => {
+  const [ax, ay] = p(a);
+  const [bx, by] = p(b);
+  return `M${ax.toFixed(1)} ${ay.toFixed(1)}L${bx.toFixed(1)} ${by.toFixed(1)}`;
+};
+// 地板上的圓（等角投影後是橢圓）
+const floorEllipse = (x: number, y: number, r: number) => {
+  const [cx, cy] = p([x, y, 0]);
+  return { cx, cy, rx: r * S * 1.2247, ry: r * S * 0.7071 };
+};
+
+const wood: Shade = { top: '#ecd3ae', right: '#d9b688', left: '#c49c6c' };
+const cream: Shade = { top: '#fffaf1', right: '#efe5d4', left: '#e2d4bd' };
+const blushBox: Shade = { top: '#f9d9dd', right: '#f0bcc3', left: '#e2a4ad' };
+const pot: Shade = { top: '#efc0ae', right: '#e0a58f', left: '#cc8d78' };
+
+// ---- 房間外殼 ----
+const floorSlab = box(0, 0, -0.5, 10, 10, 0.5, { top: '#f6ecdb', right: '#dcc39c', left: '#c9ab80' }, 5);
+const tiles: { d: string; fill: string }[] = [];
+for (let i = 0; i < 5; i++)
+  for (let j = 0; j < 5; j++)
+    tiles.push({ d: onZ(0, i * 2, i * 2 + 2, j * 2, j * 2 + 2), fill: (i + j) % 2 ? '#e3eaf1' : '#f8efe1' });
+const leftWall = box(-0.5, -0.5, 0, 0.5, 10.5, H, { top: '#f3e4cb', right: '#dce8df', left: '#e6d5b9' }, 5);
+const rightWall = box(0, -0.5, 0, 10, 0.5, H, { top: '#f3e4cb', right: '#e6d5b9', left: '#e7efe9' }, 5);
+const rug = floorEllipse(6, 6.3, 3.1);
+const rugInner = floorEllipse(6, 6.3, 2.6);
+
+// ---- 擺設 ----
+const plantPot = cylinder(0.95, 1.05, 0, 0.5, 0.9);
+const [plantX, plantY] = p([0.95, 1.05, 0.9]);
+const leaves = [
+  { dx: -14, dy: -26, rx: 9, ry: 22, rot: -28 },
+  { dx: 12, dy: -30, rx: 9, ry: 24, rot: 24 },
+  { dx: -2, dy: -40, rx: 8, ry: 24, rot: 2 },
+  { dx: -22, dy: -12, rx: 7, ry: 16, rot: -58 },
+  { dx: 20, dy: -14, rx: 7, ry: 16, rot: 56 },
+];
+const chair = [
+  ...box(2.3, 7.7, 0, 2, 2, 0.75, blushBox, 9),
+  ...box(2.3, 7.7, 0.75, 0.55, 2, 1.95, blushBox, 11),
+  ...box(2.3, 7.7, 0.75, 2.05, 0.5, 0.95, blushBox, 10),
+  ...box(2.85, 8.2, 0.75, 1.45, 1.05, 0.38, { top: '#fbe5e7', right: '#f4cdd3', left: '#e9b6be' }, 10),
+  ...box(2.3, 9.2, 0.75, 2.05, 0.5, 0.95, blushBox, 10),
+];
+const [cushX, cushY] = p([3.6, 8.75, 1.13]);
+// ---- 作品物件 ----
+// 電腦桌
+const desk = [
+  ...box(4.75, 0.3, 0, 0.3, 0.3, 2.6, wood),
+  ...box(8.15, 0.3, 0, 0.3, 0.3, 2.6, wood),
+  ...box(4.75, 2.2, 0, 0.3, 0.3, 2.6, wood),
+  ...box(8.15, 2.2, 0, 0.3, 0.3, 2.6, wood),
+  ...box(4.6, 0.15, 2.6, 4, 2.45, 0.35, wood),
+  ...box(6.45, 0.65, 2.95, 0.45, 0.3, 0.45, cream),
+  ...box(5.45, 0.5, 3.35, 2.5, 0.3, 1.8, cream),
+  ...box(5.7, 1.45, 2.95, 1.9, 0.65, 0.1, cream),
+  ...box(8.0, 1.6, 2.95, 0.38, 0.38, 0.5, blushBox),
+];
+const screen = onY(0.8, 5.62, 7.78, 3.52, 4.98);
+const codeLines = [
+  { a: 5.85, len: 1.1, z: 4.72, c: '#a9c4b1' },
+  { a: 6.1, len: 0.9, z: 4.47, c: '#f5c9cf' },
+  { a: 6.1, len: 1.3, z: 4.22, c: '#fffaf1' },
+  { a: 6.35, len: 0.7, z: 3.97, c: '#a9c4b1' },
+  { a: 5.85, len: 0.6, z: 3.72, c: '#f5c9cf' },
+].map((l) => ({ d: line([l.a, 0.8, l.z], [l.a + l.len, 0.8, l.z]), c: l.c }));
+
+// 牆上的海報（左牆）
+const posterFrame = onX(0, 2.1, 5.3, 3.4, 7.1);
+const posterPaper = onX(0, 2.3, 5.1, 3.6, 6.9);
+const posterBlocks = [
+  { d: onX(0, 2.55, 4.85, 6.15, 6.6), fill: '#b7c7d6' },
+  { d: onX(0, 2.55, 3.65, 3.95, 5.9), fill: '#a9c4b1' },
+  { d: onX(0, 3.85, 4.85, 4.95, 5.9), fill: '#f5c9cf' },
+  { d: onX(0, 3.85, 4.85, 3.95, 4.75), fill: '#efe2cc' },
+];
+
+// 書架（左牆）
+const shelf = box(0, 6.4, 0, 1.5, 3, 5.2, wood);
+const shelfHoles = [0, 1, 2, 3].map((i) => onX(1.5, 6.6, 9.2, 0.3 + i * 1.22, 1.32 + i * 1.22));
+const bookColors = ['#a9c4b1', '#f5c9cf', '#b7c7d6', '#efe2cc', '#8b6f4e', '#e3eaf1', '#4f6e59'];
+const books: { d: string; fill: string }[] = [];
+[
+  [0.28, 0.3, 0.22, 0.34, 0.26, 0.3],
+  [0.32, 0.24, 0.3, 0.26, 0.36],
+  [0.26, 0.3, 0.34, 0.22, 0.28, 0.26],
+  [0.3, 0.36, 0.24, 0.3],
+].forEach((row, i) => {
+  let y = 6.7;
+  row.forEach((w, k) => {
+    const h = 0.72 + ((i * 3 + k) % 4) * 0.07;
+    const z0 = 0.3 + i * 1.22;
+    books.push({ d: onX(1.5, y, y + w, z0, z0 + h), fill: bookColors[(i * 2 + k) % bookColors.length] });
+    y += w + 0.04;
+  });
+});
+
+// 茶几上的筆記本
+const table = [
+  ...box(4.95, 5.35, 0, 0.22, 0.22, 1, wood),
+  ...box(6.95, 5.35, 0, 0.22, 0.22, 1, wood),
+  ...box(4.95, 7.15, 0, 0.22, 0.22, 1, wood),
+  ...box(6.95, 7.15, 0, 0.22, 0.22, 1, wood),
+  ...box(4.8, 5.2, 1, 2.5, 2.3, 0.3, wood),
+  ...box(5.25, 5.7, 1.3, 1.5, 1.25, 0.05, { top: '#4f6e59', right: '#46624f', left: '#3e5746' }),
+  ...box(5.3, 5.75, 1.35, 1.4, 1.15, 0.07, cream),
+];
+const pageLines = [0.95, 1.2, 1.45, 1.7].flatMap((t) => [
+  line([5.45, 5.75 + t * 0.55, 1.42], [5.9, 5.75 + t * 0.55, 1.42]),
+  line([6.1, 5.75 + t * 0.55, 1.42], [6.55, 5.75 + t * 0.55, 1.42]),
+]);
+const spine = line([6.0, 5.75, 1.42], [6.0, 6.9, 1.42]);
+const pencil = box(5.2, 6.95, 1.3, 1.1, 0.12, 0.1, { top: '#f2c46b', right: '#dca94e', left: '#c99640' });
+
+// 牆上層板的相機（右牆）
+const wallShelf = box(8.1, 0, 5.3, 1.85, 1.1, 0.22, wood);
+const camera = [
+  ...box(8.25, 0.15, 5.52, 1.2, 0.72, 0.78, { top: '#fffaf1', right: '#efe5d4', left: '#e2d4bd' }),
+  ...box(8.45, 0.3, 6.3, 0.42, 0.4, 0.18, { top: '#6b5746', right: '#5a4839', left: '#4d3d30' }),
+];
+const camBand = onY(0.87, 8.25, 9.45, 5.72, 6.02);
+const [lensX, lensY] = p([8.85, 0.87, 5.92]);
+const shelfPot = cylinder(9.7, 0.5, 5.52, 0.18, 0.36);
+const [sproutX, sproutY] = p([9.7, 0.5, 5.88]);
+
+// 電視遊樂器
+const consoleSet = [
+  ...box(7.9, 3.7, 0, 2.0, 1.9, 0.9, wood),
+  ...box(8.1, 3.95, 0.9, 1.7, 1.4, 1.75, cream),
+  ...box(8.35, 5.4, 0.9, 0.9, 0.45, 0.12, { top: '#b7c7d6', right: '#9eb2c5', left: '#8aa0b6' }),
+];
+const tvScreen = onY(5.35, 8.3, 9.6, 1.1, 2.45);
+const sprite = [
+  [8.2, 1.55, 0.2, 0.2],
+  [8.4, 1.75, 0.2, 0.2],
+  [8.6, 1.55, 0.2, 0.2],
+  [8.4, 1.35, 0.2, 0.2],
+  [8.8, 1.95, 0.18, 0.18],
+].map(([x, z, w, h]) => onY(5.35, x + 0.45, x + 0.45 + w, z, z + h));
+
+// ---- 名牌位置（每個物件的頂端） ----
+const anchor: Record<Slot, P3> = {
+  computer: [6.7, 0.7, 5.55],
+  poster: [0, 3.7, 7.35],
+  bookshelf: [0.75, 7.9, 5.45],
+  notebook: [6.0, 6.3, 1.7],
+  camera: [8.85, 0.5, 6.7],
+  console: [8.95, 4.65, 2.9],
+};
+const pct = (slot: Slot) => {
+  const [x, y] = p(anchor[slot]);
+  return { left: `${((x / VW) * 100).toFixed(2)}%`, top: `${((y / VH) * 100).toFixed(2)}%` };
+};
+
+const order: Slot[] = ['poster', 'computer', 'camera', 'bookshelf', 'notebook', 'console'];
+const placed = order.filter((s) => bySlot.has(s));
+
+// 讓物件和名牌互相連動：停在某件作品上時，它浮起，其他變淡
+const linkCss = placed
+  .map((s) => {
+    const on = `.room:has([data-slot="${s}"]:is(:hover, :focus-visible))`;
+    return `${on} .obj:not([data-slot="${s}"]) { opacity: .5; }
+${on} .tag:not([data-slot="${s}"]) { opacity: .55; }
+${on} .obj[data-slot="${s}"] { transform: translateY(-7px); filter: drop-shadow(0 10px 8px rgb(92 66 40 / .28)); }
+${on} .tag[data-slot="${s}"] { z-index: 3; border-color: var(--sage-deep); background: var(--porcelain); }
+${on} .tag[data-slot="${s}"] .tag-more { grid-template-rows: 1fr; }`;
+  })
+  .join('\n') +
+  `
+@media (prefers-reduced-motion: reduce) {
+  .room .obj { transform: none !important; filter: none !important; }
+}`;
+
+const stroke = { stroke: '#7a5f43', 'stroke-width': 1.4, 'stroke-linejoin': 'round' } as const;
+---
+
+<div class="room" style={`--vw:${VW};--vh:${VH}`}>
+  <svg viewBox={`0 0 ${VW} ${VH}`} aria-hidden="true" class="room-art">
+    <defs>
+      <pattern id="paper-flowers" width="46" height="46" patternUnits="userSpaceOnUse">
+        <g fill="#fffaf1" opacity="0.85">
+          <circle cx="12" cy="9" r="2.6" />
+          <circle cx="16.4" cy="12.4" r="2.6" />
+          <circle cx="12" cy="15.8" r="2.6" />
+          <circle cx="7.6" cy="12.4" r="2.6" />
+        </g>
+        <circle cx="12" cy="12.4" r="1.6" fill="#f5c9cf" />
+        <path d="M34 30q2 6 0 12M34 36q4-2 6-6" stroke="#a9c4b1" stroke-width="1.4" fill="none" stroke-linecap="round" />
+      </pattern>
+    </defs>
+
+    <!-- 地板 -->
+    <g {...stroke}>
+      {floorSlab.map((f) => <path d={f.d} fill={f.fill} />)}
+    </g>
+    <g stroke="#e0cfb4" stroke-width="0.8">
+      {tiles.map((t) => <polygon points={t.d} fill={t.fill} />)}
+    </g>
+    <ellipse cx={rug.cx} cy={rug.cy} rx={rug.rx} ry={rug.ry} fill="#fffaf1" {...stroke} />
+    <ellipse cx={rugInner.cx} cy={rugInner.cy} rx={rugInner.rx} ry={rugInner.ry} fill="none" stroke="#f5c9cf" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round" />
+
+    <!-- 牆 -->
+    <g {...stroke}>
+      {leftWall.map((f) => <path d={f.d} fill={f.fill} />)}
+      {rightWall.map((f) => <path d={f.d} fill={f.fill} />)}
+    </g>
+    <polygon points={onX(0, 0, 10, 0.02, H)} fill="url(#paper-flowers)" />
+    <polygon points={onY(0, 0, 10, 0.02, H)} fill="url(#paper-flowers)" opacity="0.7" />
+    <path d={line([0, 0, 0], [0, 0, H])} stroke="#c9b597" stroke-width="1.2" />
+    <g stroke="#cdb89a" stroke-width="1.2" fill="#e9dcc6">
+      <polygon points={onX(0, 0, 10, 0, 0.35)} />
+      <polygon points={onY(0, 0, 10, 0, 0.35)} />
+    </g>
+
+    <!-- 窗戶 -->
+    <g {...stroke}>
+      <polygon points={onY(0, 1.0, 3.9, 2.9, 6.7)} fill="#fffaf1" />
+      <polygon points={onY(0, 1.2, 2.35, 3.1, 4.75)} fill="#e3eaf1" />
+      <polygon points={onY(0, 2.55, 3.7, 3.1, 4.75)} fill="#e3eaf1" />
+      <polygon points={onY(0, 1.2, 2.35, 4.95, 6.5)} fill="#e3eaf1" />
+      <polygon points={onY(0, 2.55, 3.7, 4.95, 6.5)} fill="#e3eaf1" />
+    </g>
+    <path d={line([1.45, 0, 6.2], [1.95, 0, 5.6])} stroke="#fffaf1" stroke-width="3" stroke-linecap="round" />
+
+    <!-- 盆栽 -->
+    <g {...stroke}>
+      <path d={plantPot.body} fill="#e0a58f" />
+      <ellipse {...plantPot.top} fill="#efc0ae" />
+      <ellipse cx={plantPot.top.cx} cy={plantPot.top.cy} rx={plantPot.top.rx * 0.78} ry={plantPot.top.ry * 0.78} fill="#8b6f4e" />
+      {leaves.map((l) => (
+        <ellipse cx={plantX + l.dx} cy={plantY + l.dy} rx={l.rx} ry={l.ry} fill="#a9c4b1" transform={`rotate(${l.rot} ${plantX + l.dx} ${plantY + l.dy})`} />
+      ))}
+    </g>
+
+    <!-- 海報 -->
+    <Obj slot="poster" work={bySlot.get('poster')} i={0}>
+      <polygon points={posterFrame} fill="#8b6f4e" {...stroke} />
+      <polygon points={posterPaper} fill="#fffaf1" />
+      {posterBlocks.map((b) => <polygon points={b.d} fill={b.fill} />)}
+    </Obj>
+
+    <!-- 電腦桌 -->
+    <Obj slot="computer" work={bySlot.get('computer')} i={1}>
+      <g {...stroke}>{desk.map((f) => <path d={f.d} fill={f.fill} />)}</g>
+      <polygon points={screen} fill="#4d6680" {...stroke} />
+      {codeLines.map((l) => <path d={l.d} stroke={l.c} stroke-width="3" stroke-linecap="round" />)}
+    </Obj>
+
+    <!-- 相機 -->
+    <Obj slot="camera" work={bySlot.get('camera')} i={2}>
+      <g {...stroke}>
+        {wallShelf.map((f) => <path d={f.d} fill={f.fill} />)}
+        {camera.map((f) => <path d={f.d} fill={f.fill} />)}
+        <polygon points={camBand} fill="#b7c7d6" />
+        <circle cx={lensX} cy={lensY} r="11" fill="#6b5746" />
+        <circle cx={lensX} cy={lensY} r="5.5" fill="#b7c7d6" />
+        <path d={shelfPot.body} fill="#e0a58f" />
+        <ellipse {...shelfPot.top} fill="#efc0ae" />
+        <ellipse cx={sproutX - 4} cy={sproutY - 6} rx="4" ry="8" fill="#a9c4b1" transform={`rotate(-25 ${sproutX - 4} ${sproutY - 6})`} />
+        <ellipse cx={sproutX + 4} cy={sproutY - 7} rx="4" ry="8" fill="#a9c4b1" transform={`rotate(25 ${sproutX + 4} ${sproutY - 7})`} />
+      </g>
+    </Obj>
+
+    <!-- 書架 -->
+    <Obj slot="bookshelf" work={bySlot.get('bookshelf')} i={3}>
+      <g {...stroke}>
+        {shelf.map((f) => <path d={f.d} fill={f.fill} />)}
+        {shelfHoles.map((d) => <polygon points={d} fill="#a88259" />)}
+      </g>
+      <g stroke="#7a5f43" stroke-width="1">{books.map((b) => <polygon points={b.d} fill={b.fill} />)}</g>
+    </Obj>
+
+    <!-- 粉紅沙發（擺設） -->
+    <g {...stroke}>{chair.map((f) => <path d={f.d} fill={f.fill} />)}</g>
+    <path d={`M${cushX - 16} ${cushY + 2}q10 -7 22 -3`} stroke="#fffaf1" stroke-width="3" stroke-linecap="round" fill="none" />
+
+    <!-- 茶几與筆記本 -->
+    <Obj slot="notebook" work={bySlot.get('notebook')} i={4}>
+      <g {...stroke}>{table.map((f) => <path d={f.d} fill={f.fill} />)}</g>
+      <path d={pageLines.join('')} stroke="#b7c7d6" stroke-width="1.4" stroke-linecap="round" />
+      <path d={spine} stroke="#c9b597" stroke-width="1.4" />
+      <g {...stroke}>{pencil.map((f) => <path d={f.d} fill={f.fill} />)}</g>
+    </Obj>
+
+    <!-- 電視遊樂器 -->
+    <Obj slot="console" work={bySlot.get('console')} i={5}>
+      <g {...stroke}>{consoleSet.map((f) => <path d={f.d} fill={f.fill} />)}</g>
+      <polygon points={tvScreen} fill="#4d6680" {...stroke} />
+      {sprite.map((d) => <polygon points={d} fill="#f5c9cf" />)}
+    </Obj>
+  </svg>
+
+  {placed.map((s) => {
+    const w = bySlot.get(s)!;
+    const pos = pct(s);
+    return (
+      <a class="tag" data-slot={s} href={w.href} style={`left:${pos.left};top:${pos.top}`}>
+        <span class="tag-title">
+          {w.title}
+          {w.placeholder && <span class="sample">範例</span>}
+        </span>
+        <span class="tag-more">
+          <span>{[...w.tech.slice(0, 3), String(w.year)].join(' · ')}</span>
+        </span>
+      </a>
+    );
+  })}
+</div>
+
+<Fragment set:html={`<style>${linkCss}</style>`} />
+
+<style>
+  .room {
+    position: relative;
+    aspect-ratio: var(--vw) / var(--vh);
+    width: 100%;
+  }
+
+  .room-art {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .room :global(.obj) {
+    transition:
+      transform 0.45s var(--ease-out),
+      opacity 0.35s var(--ease-out),
+      filter 0.45s var(--ease-out);
+    animation: settle 0.9s var(--ease-out) backwards;
+    animation-delay: calc(0.12s + var(--i) * 0.09s);
+  }
+
+  .room :global(a.obj-link) {
+    cursor: pointer;
+  }
+
+  @keyframes settle {
+    from {
+      transform: translateY(-16px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .tag {
+    position: absolute;
+    z-index: 2;
+    transform: translate(-50%, calc(-100% - 10px));
+    width: max-content;
+    display: grid;
+    justify-items: center;
+    padding: 0.35rem 0.8rem 0.4rem;
+    border-radius: 12px;
+    background: rgb(255 250 241 / 0.94);
+    border: 1.5px solid var(--acorn);
+    box-shadow: var(--shadow-soft);
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      opacity 0.3s var(--ease-out),
+      border-color 0.3s var(--ease-out),
+      background 0.3s var(--ease-out);
+  }
+
+  .tag::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -7px;
+    width: 10px;
+    height: 10px;
+    background: inherit;
+    border-right: inherit;
+    border-bottom: inherit;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .tag-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(0.8125rem, 0.55rem + 0.55vw, 1rem);
+    line-height: 1.4;
+  }
+
+  .tag-more {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s var(--ease-out);
+    font-size: 0.8125rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .tag-more > span {
+    overflow: hidden;
+  }
+
+  .tag:focus-visible {
+    outline-offset: 4px;
+    border-radius: 12px;
+  }
+
+  @media (hover: none) {
+    .tag-more {
+      display: none;
+    }
+  }
+</style>

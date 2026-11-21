@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Base title="找不到頁面">
+  <section class="wrap nf">
+    <h1>這個房間是空的</h1>
+    <p>你要找的頁面不在這裡，可能已經搬走了。</p>
+    <a href={`${base}/`}>回到我的房間</a>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    max-width: 40rem;
+    padding-block: var(--space-9);
+  }
+  h1 {
+    font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem);
+  }
+  p {
+    margin-block: var(--space-4) var(--space-5);
+    color: var(--ink-soft);
+  }
+</style>

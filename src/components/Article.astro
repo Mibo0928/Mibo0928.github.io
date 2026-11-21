@@ -1,0 +1,80 @@
+---
+// 作品內頁和日記內頁共用的閱讀版面
+interface Props {
+  title: string;
+  date: Date;
+  placeholder?: boolean;
+  back: { href: string; label: string };
+  tone?: 'sage' | 'blush';
+}
+const { title, date, placeholder, back, tone = 'sage' } = Astro.props;
+const fmt = `${date.getFullYear()} 年 ${date.getMonth() + 1} 月 ${date.getDate()} 日`;
+---
+
+<article class={`article wrap tone-${tone}`}>
+  <a class="back" href={back.href}>← {back.label}</a>
+  <header>
+    <time datetime={date.toISOString().slice(0, 10)}>{fmt}</time>
+    <h1>
+      {title}
+      {placeholder && <span class="sample">範例</span>}
+    </h1>
+    <slot name="meta" />
+  </header>
+  <div class="prose">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .article {
+    max-width: 46rem;
+    padding-top: var(--space-5);
+  }
+  .back {
+    font-size: 0.9375rem;
+    color: var(--ink-soft);
+  }
+  header {
+    margin-top: var(--space-6);
+    padding: var(--space-6);
+    border-radius: var(--radius-l);
+    background: var(--porcelain);
+    border: 1.5px solid var(--line);
+    box-shadow: var(--shadow-soft);
+  }
+  .tone-blush header {
+    background: var(--blush-soft);
+    border-color: var(--blush);
+  }
+  time {
+    font-size: 0.875rem;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  h1 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+    font-size: clamp(2rem, 1.5rem + 2vw, 3.25rem);
+  }
+  .prose {
+    margin-top: var(--space-7);
+    font-size: 1.125rem;
+    line-height: 1.9;
+  }
+  .prose :global(p + p) {
+    margin-top: 1em;
+  }
+  .prose :global(h2) {
+    margin-top: var(--space-7);
+    margin-bottom: var(--space-3);
+    font-size: 1.5rem;
+  }
+  .prose :global(img) {
+    border-radius: var(--radius-m);
+    margin-block: var(--space-5);
+  }
+</style>

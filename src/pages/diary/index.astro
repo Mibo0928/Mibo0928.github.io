@@ -1,0 +1,104 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const entries = (await getCollection('diary')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const fmt = (d: Date) =>
+  `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+---
+
+<Base title="日記" current="diary">
+  <section class="wrap page">
+    <h1>日記</h1>
+    <p class="lede">生活裡的小紀錄，一共 {entries.length} 篇。</p>
+    {entries.length === 0 ? (
+      <p class="empty">還沒有日記。在 src/content/diary/ 放一個 .md 檔就會出現。</p>
+    ) : (
+      <ol class="entries">
+        {entries.map((e) => (
+          <li>
+            <a href={`${base}/diary/${e.id}/`}>
+              <time datetime={e.data.date.toISOString().slice(0, 10)}>{fmt(e.data.date)}</time>
+              <span class="title">
+                {e.data.title}
+                {e.data.placeholder && <span class="sample">範例</span>}
+              </span>
+              {e.data.excerpt && <span class="excerpt">{e.data.excerpt}</span>}
+            </a>
+          </li>
+        ))}
+      </ol>
+    )}
+  </section>
+</Base>
+
+<style>
+  .page {
+    max-width: 46rem;
+    padding-top: var(--space-6);
+  }
+  h1 {
+    font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem);
+  }
+  .lede {
+    margin-top: var(--space-3);
+    color: var(--ink-soft);
+  }
+  .entries {
+    list-style: none;
+    margin: var(--space-7) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+  }
+  .entries a {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: var(--space-1) var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-m);
+    background: var(--porcelain);
+    border: 1.5px solid var(--line);
+    text-decoration: none;
+    transition:
+      border-color 0.25s var(--ease-out),
+      transform 0.35s var(--ease-out);
+  }
+  .entries a:hover {
+    border-color: var(--blush);
+    transform: translateY(-2px);
+  }
+  time {
+    grid-row: span 2;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-faint);
+    font-size: 0.9375rem;
+    padding-top: 0.15em;
+  }
+  .title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1875rem;
+  }
+  .excerpt {
+    color: var(--ink-soft);
+    font-size: 0.9375rem;
+  }
+  .empty {
+    margin-top: var(--space-6);
+    color: var(--ink-soft);
+  }
+  @media (max-width: 560px) {
+    .entries a {
+      grid-template-columns: 1fr;
+    }
+    time {
+      grid-row: auto;
+    }
+  }
+</style>

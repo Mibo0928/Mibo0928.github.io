@@ -1,0 +1,14 @@
+{
+  "name": "米小波",
+  "intro": "某地名大學的學生想學習資訊相關的知識",
+  "about": "想到處去看看，把步調慢下來看一些以前沒有興趣的事情，找到人生其他的目的。",
+  "mood": {
+    "weather": "partly",
+    "text": "試著讓ai寫網站心情不錯。",
+    "placeholder": true
+  },
+  "contact": {
+    "email": "",
+    "github": ""
+  }
+}

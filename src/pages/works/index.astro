@@ -1,0 +1,5 @@
+---
+// 作品沒有獨立的列表頁：直接帶到首頁的作品清單
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+return Astro.redirect(`${base}/#works`);
+---

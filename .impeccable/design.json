@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-21T00:00:00Z",
+  "title": "Design System: 你的名字的小房間",
+  "extensions": {
+    "colorMeta": {
+      "porcelain": { "role": "neutral", "displayName": "瓷白 Porcelain", "canonical": "#fffaf1", "tonalRamp": ["#3a3225", "#5e5340", "#857860", "#ab9f86", "#cfc5ae", "#ebe3d2", "#f8f1e4", "#fffaf1"] },
+      "oat": { "role": "neutral", "displayName": "燕麥 Oat", "canonical": "#fbf3e6", "tonalRamp": ["#3b3122", "#5f523c", "#857558", "#ab9a7a", "#cdbe9f", "#e7dac3", "#f4ead9", "#fbf3e6"] },
+      "oat-flour": { "role": "neutral", "displayName": "燕麥粉 Oat Flour", "canonical": "#efe2cc", "tonalRamp": ["#3a2f1f", "#5d4e36", "#836f50", "#a8916c", "#c8b28c", "#dfcdaf", "#efe2cc", "#f8f1e5"] },
+      "line": { "role": "neutral", "displayName": "紙線 Line", "canonical": "#e0cfb4", "tonalRamp": ["#382c1b", "#5a4830", "#7e6646", "#a1855f", "#c0a67f", "#e0cfb4", "#ede2d0", "#f8f2e8"] },
+      "sage": { "role": "primary", "displayName": "鼠尾草綠 Sage", "canonical": "#a9c4b1", "tonalRamp": ["#1f2d23", "#344b3b", "#4f6e59", "#6f8f79", "#8eab97", "#a9c4b1", "#dce8df", "#f1f6f2"] },
+      "moss": { "role": "primary", "displayName": "苔蘚淺綠 Moss", "canonical": "#dce8df", "tonalRamp": ["#1f2d23", "#344b3b", "#4f6e59", "#6f8f79", "#8eab97", "#a9c4b1", "#dce8df", "#f1f6f2"] },
+      "sage-deep": { "role": "primary", "displayName": "深鼠尾草 Sage Deep", "canonical": "#4f6e59", "tonalRamp": ["#1f2d23", "#344b3b", "#4f6e59", "#6f8f79", "#8eab97", "#a9c4b1", "#dce8df", "#f1f6f2"] },
+      "blush": { "role": "secondary", "displayName": "腮紅粉 Blush", "canonical": "#f5c9cf", "tonalRamp": ["#3d1a20", "#62293a", "#94434f", "#b9707b", "#dc9fa8", "#f5c9cf", "#fbe5e7", "#fef4f5"] },
+      "blush-soft": { "role": "secondary", "displayName": "淺腮紅 Blush Soft", "canonical": "#fbe5e7", "tonalRamp": ["#3d1a20", "#62293a", "#94434f", "#b9707b", "#dc9fa8", "#f5c9cf", "#fbe5e7", "#fef4f5"] },
+      "blush-deep": { "role": "secondary", "displayName": "深莓 Blush Deep", "canonical": "#94434f", "tonalRamp": ["#3d1a20", "#62293a", "#94434f", "#b9707b", "#dc9fa8", "#f5c9cf", "#fbe5e7", "#fef4f5"] },
+      "rain": { "role": "tertiary", "displayName": "雨雲藍 Rain", "canonical": "#b7c7d6", "tonalRamp": ["#1d2836", "#334558", "#4d6680", "#6f88a0", "#93a9bd", "#b7c7d6", "#e3eaf1", "#f3f6f9"] },
+      "rain-soft": { "role": "tertiary", "displayName": "淺雨藍 Rain Soft", "canonical": "#e3eaf1", "tonalRamp": ["#1d2836", "#334558", "#4d6680", "#6f88a0", "#93a9bd", "#b7c7d6", "#e3eaf1", "#f3f6f9"] },
+      "rain-deep": { "role": "tertiary", "displayName": "深雨藍 Rain Deep", "canonical": "#4d6680", "tonalRamp": ["#1d2836", "#334558", "#4d6680", "#6f88a0", "#93a9bd", "#b7c7d6", "#e3eaf1", "#f3f6f9"] },
+      "acorn": { "role": "tertiary", "displayName": "橡實褐 Acorn", "canonical": "#8b6f4e", "tonalRamp": ["#2a2016", "#45362a", "#6b5746", "#8b6f4e", "#a88259", "#c49c6c", "#ecd3ae", "#f8eedf"] },
+      "room-stroke": { "role": "tertiary", "displayName": "房間描邊褐 Room Stroke", "canonical": "#7a5f43", "tonalRamp": ["#2a2016", "#4d3d30", "#7a5f43", "#a88259", "#c9b597", "#cdb89a", "#e9dcc6", "#f6ecdb"] },
+      "ink": { "role": "neutral", "displayName": "墨褐 Ink", "canonical": "#45362a", "tonalRamp": ["#1f1812", "#2f241c", "#45362a", "#5a4839", "#6b5746", "#75604e", "#a89482", "#e6dccf"] },
+      "ink-soft": { "role": "neutral", "displayName": "淡墨 Ink Soft", "canonical": "#6b5746", "tonalRamp": ["#1f1812", "#2f241c", "#45362a", "#5a4839", "#6b5746", "#75604e", "#a89482", "#e6dccf"] },
+      "ink-faint": { "role": "neutral", "displayName": "更淡墨 Ink Faint", "canonical": "#75604e", "tonalRamp": ["#1f1812", "#2f241c", "#45362a", "#5a4839", "#6b5746", "#75604e", "#a89482", "#e6dccf"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "首頁的站主名字，全站只有這一處。" },
+      "headline": { "displayName": "Headline", "purpose": "區塊標題與內頁 h1。" },
+      "title": { "displayName": "Title", "purpose": "作品名、日記標題、房間名牌、心情字、站名、年份。" },
+      "body": { "displayName": "Body", "purpose": "內文；文章內文放大到 1.125rem / 1.9。" },
+      "label": { "displayName": "Label", "purpose": "導覽、技術標籤、日期、面板標題、提示。" }
+    },
+    "shadows": [
+      { "name": "soft", "value": "0 6px 18px -8px rgb(92 66 40 / 0.28)", "purpose": "面板、文章標頭、房間名牌，靜止狀態。" },
+      { "name": "object-float", "value": "drop-shadow(0 10px 8px rgb(92 66 40 / .28))", "purpose": "房間物件懸停或聚焦時，配合上移 7px。" }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "全站唯一的緩動曲線。" },
+      { "name": "state", "value": "0.2s–0.35s", "purpose": "外框、顏色、透明度的狀態轉換。" },
+      { "name": "object-lift", "value": "0.45s", "purpose": "房間物件浮起與陰影。" },
+      { "name": "settle", "value": "0.9s, delay 0.12s + i × 0.09s", "purpose": "載入時房間物件依序從上方 16px 落定。" }
+    ],
+    "breakpoints": [
+      { "name": "phone", "value": "560px" },
+      { "name": "single-column", "value": "820px" },
+      { "name": "intro-span", "value": "1180px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "導覽膠囊",
+      "kind": "nav",
+      "refersTo": "nav-pill",
+      "description": "頂部導覽，膠囊按鈕加 18px 線條圖示；目前頁為苔蘚綠。",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 10.5 12 4l8 6.5\"/><path d=\"M6 9v10.5h12V9\"/><path d=\"M10 19.5v-5h4v5\"/></svg>房間</a><a href=\"#\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5.5 4.5h11a2 2 0 0 1 2 2v13h-11a2 2 0 0 1-2-2z\"/><path d=\"M5.5 17.5a2 2 0 0 1 2-2h11\"/><path d=\"M9 8.5h6M9 11.5h4\"/></svg>日記</a></nav>",
+      "css": ".ds-nav { display: flex; gap: var(--space-2, 0.5rem); } .ds-nav a { display: inline-flex; align-items: center; gap: 0.4em; padding: 0.45em 1em; border-radius: 999px; border: 1.5px solid var(--line, #e0cfb4); background: var(--porcelain, #fffaf1); color: var(--ink-soft, #6b5746); text-decoration: none; font-family: var(--font-body, 'Huninn', sans-serif); font-size: 0.9375rem; line-height: 1.4; transition: border-color 0.2s cubic-bezier(0.16,1,0.3,1), color 0.2s cubic-bezier(0.16,1,0.3,1); } .ds-nav a:hover { border-color: var(--sage, #a9c4b1); color: var(--ink, #45362a); } .ds-nav a[aria-current='page'] { background: var(--moss, #dce8df); border-color: var(--sage, #a9c4b1); color: var(--sage-deep, #4f6e59); } .ds-nav a:focus-visible { outline: 3px solid var(--sage-deep, #4f6e59); outline-offset: 3px; }"
+    },
+    {
+      "name": "心情面板",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "瓷白圓角面板，面板標題下有點狀虛線。",
+      "html": "<div class=\"ds-panel\"><p class=\"ds-panel-head\">今日心情</p><p class=\"ds-mood\">晴天</p><p>這裡寫你今天的心情。</p></div>",
+      "css": ".ds-panel { background: var(--porcelain, #fffaf1); border: 1.5px solid var(--line, #e0cfb4); border-radius: 24px; padding: 1rem 1.5rem 1.5rem; box-shadow: 0 6px 18px -8px rgb(92 66 40 / 0.28); color: var(--ink, #45362a); font-family: var(--font-body, 'Huninn', sans-serif); max-width: 22rem; } .ds-panel p { margin: 0; } .ds-panel .ds-panel-head { font-size: 0.9375rem; color: var(--ink-soft, #6b5746); padding-bottom: 0.75rem; margin-bottom: 0.75rem; background: radial-gradient(circle, var(--line, #e0cfb4) 1px, transparent 1.5px) 0 100% / 8px 2px repeat-x; } .ds-mood { font-family: var(--font-display, 'Noto Serif TC', serif); font-weight: 900; font-size: 1.5rem; line-height: 1.3; }"
+    },
+    {
+      "name": "日記面板",
+      "kind": "card",
+      "refersTo": "panel-diary",
+      "description": "腮紅粉面板，條目之間用粉色點狀虛線，懸停出現瓷白底。",
+      "html": "<div class=\"ds-diary\"><p class=\"ds-diary-head\">最近的日記</p><a class=\"ds-entry\" href=\"#\"><span class=\"ds-entry-title\">網站開張了</span><span class=\"ds-entry-ex\">今天把自己的小房間搭起來了。</span><time>2026.11.21</time></a><a class=\"ds-more\" href=\"#\">全部日記 →</a></div>",
+      "css": ".ds-diary { background: var(--blush-soft, #fbe5e7); border: 1.5px solid var(--blush, #f5c9cf); border-radius: 24px; padding: 1rem 1.5rem 1.5rem; box-shadow: 0 6px 18px -8px rgb(92 66 40 / 0.28); color: var(--ink, #45362a); font-family: var(--font-body, 'Huninn', sans-serif); max-width: 22rem; } .ds-diary-head { margin: 0 0 0.75rem; padding-bottom: 0.75rem; font-size: 0.9375rem; color: var(--blush-deep, #94434f); background: radial-gradient(circle, var(--blush, #f5c9cf) 1px, transparent 1.5px) 0 100% / 8px 2px repeat-x; } .ds-entry { display: grid; gap: 0.25rem; padding: 0.75rem; margin: 0 -0.75rem; border-radius: 16px; text-decoration: none; color: inherit; transition: background 0.25s cubic-bezier(0.16,1,0.3,1); } .ds-entry:hover { background: rgb(255 250 241 / 0.75); } .ds-entry:focus-visible { outline: 3px solid var(--sage-deep, #4f6e59); outline-offset: 3px; } .ds-entry-title { font-family: var(--font-display, 'Noto Serif TC', serif); font-weight: 700; font-size: 1.0625rem; } .ds-entry-ex { font-size: 0.875rem; color: var(--ink-soft, #6b5746); } .ds-entry time { font-size: 0.8125rem; color: var(--ink-faint, #75604e); font-variant-numeric: tabular-nums; } .ds-more { display: inline-block; margin-top: 1rem; font-size: 0.9375rem; color: var(--blush-deep, #94434f); text-decoration-color: var(--blush, #f5c9cf); text-decoration-thickness: 2px; text-underline-offset: 0.25em; }"
+    },
+    {
+      "name": "房間名牌",
+      "kind": "custom",
+      "refersTo": "room-tag",
+      "description": "掛在房間物件上方的常駐名牌；懸停或聚焦時展開技術與年份。",
+      "html": "<a class=\"ds-tag\" href=\"#\"><span class=\"ds-tag-title\">這個網站</span><span class=\"ds-tag-more\"><span>Astro · CSS · SVG · 2026</span></span></a>",
+      "css": ".ds-tag { position: relative; display: inline-grid; justify-items: center; margin: 1rem; padding: 0.35rem 0.8rem 0.4rem; border-radius: 12px; background: rgb(255 250 241 / 0.94); border: 1.5px solid var(--acorn, #8b6f4e); box-shadow: 0 6px 18px -8px rgb(92 66 40 / 0.28); color: var(--ink, #45362a); text-decoration: none; white-space: nowrap; transition: border-color 0.3s cubic-bezier(0.16,1,0.3,1), background 0.3s cubic-bezier(0.16,1,0.3,1); } .ds-tag::after { content: ''; position: absolute; left: 50%; bottom: -7px; width: 10px; height: 10px; background: inherit; border-right: inherit; border-bottom: inherit; transform: translateX(-50%) rotate(45deg); } .ds-tag-title { font-family: var(--font-display, 'Noto Serif TC', serif); font-weight: 700; font-size: 1rem; line-height: 1.4; } .ds-tag-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s cubic-bezier(0.16,1,0.3,1); font-family: var(--font-body, 'Huninn', sans-serif); font-size: 0.8125rem; color: var(--ink-soft, #6b5746); line-height: 1.5; } .ds-tag-more > span { overflow: hidden; } .ds-tag:hover, .ds-tag:focus-visible { border-color: var(--sage-deep, #4f6e59); background: var(--porcelain, #fffaf1); } .ds-tag:hover .ds-tag-more, .ds-tag:focus-visible .ds-tag-more { grid-template-rows: 1fr; } .ds-tag:focus-visible { outline: 3px solid var(--sage-deep, #4f6e59); outline-offset: 4px; }"
+    },
+    {
+      "name": "技術標籤",
+      "kind": "chip",
+      "refersTo": "tech-chip",
+      "description": "作品使用的技術，苔蘚綠膠囊。",
+      "html": "<ul class=\"ds-tech\"><li>Astro</li><li>CSS</li><li>SVG</li></ul>",
+      "css": ".ds-tech { display: flex; flex-wrap: wrap; gap: 0.5rem; list-style: none; margin: 0; padding: 0; } .ds-tech li { font-family: var(--font-body, 'Huninn', sans-serif); font-size: 0.8125rem; line-height: 1; padding: 0.4em 0.7em; border-radius: 999px; background: var(--moss, #dce8df); color: var(--sage-deep, #4f6e59); }"
+    },
+    {
+      "name": "範例標記",
+      "kind": "chip",
+      "refersTo": "sample-badge",
+      "description": "標示佔位內容的小膠囊，換成真內容後移除。",
+      "html": "<span class=\"ds-sample\">範例</span>",
+      "css": ".ds-sample { display: inline-block; font-family: var(--font-body, 'Huninn', sans-serif); font-size: 0.75rem; line-height: 1; padding: 0.3em 0.6em; border-radius: 999px; background: var(--blush-soft, #fbe5e7); color: var(--blush-deep, #94434f); border: 1px solid var(--blush, #f5c9cf); white-space: nowrap; }"
+    },
+    {
+      "name": "作品清單列",
+      "kind": "custom",
+      "refersTo": "work-row",
+      "description": "純文字作品清單的一列：橡實褐年份、襯線作品名、摘要，上下用橡實褐點狀虛線。",
+      "html": "<div class=\"ds-work\"><span class=\"ds-work-year\">2026</span><div><a class=\"ds-work-title\" href=\"#\">這個網站</a><p>我的個人網站，放作品也放日記。</p></div></div>",
+      "css": ".ds-work { display: grid; grid-template-columns: 5rem minmax(0, 1fr); gap: 1.5rem; align-items: baseline; padding-block: 1.5rem; color: var(--ink, #45362a); font-family: var(--font-body, 'Huninn', sans-serif); background: radial-gradient(circle, var(--acorn, #8b6f4e) 1.1px, transparent 1.6px) 0 0 / 9px 3px repeat-x, radial-gradient(circle, var(--acorn, #8b6f4e) 1.1px, transparent 1.6px) 0 100% / 9px 3px repeat-x; } .ds-work-year { font-family: var(--font-display, 'Noto Serif TC', serif); font-weight: 700; color: var(--acorn, #8b6f4e); font-variant-numeric: tabular-nums; } .ds-work-title { font-family: var(--font-display, 'Noto Serif TC', serif); font-weight: 700; font-size: 1.375rem; color: inherit; text-decoration: none; } .ds-work-title:hover { text-decoration: underline; text-decoration-color: var(--sage, #a9c4b1); text-decoration-thickness: 2px; } .ds-work-title:focus-visible { outline: 3px solid var(--sage-deep, #4f6e59); outline-offset: 3px; } .ds-work p { margin: 0.25rem 0 0; color: var(--ink-soft, #6b5746); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "親手佈置的小房間",
+    "overview": "整個網站是站主自己佈置的一間小房間。首頁中央是一間用程式畫出來的等角（isometric）房間：燕麥色地板、細花壁紙、菱格地磚，家具都是圓角的貼紙感方塊，帶一圈柔和的深褐描邊。作品不放在卡片網格裡，而是房間裡的物件（海報、電腦桌、相機、書架、筆記本、電視遊樂器），每件物件上方掛著永遠看得見的名牌。日記放在旁邊的粉色小面板裡。\n\n氣氛溫暖、安靜、手作。底色是燕麥與瓷白的紙，四個房間色（鼠尾草綠、腮紅粉、雨雲藍、橡實褐）都是低彩度的粉彩；文字用暖深褐而不是黑。大字是厚重的粗襯線（Noto Serif TC 900），內文與介面用圓潤的粉圓體（Huninn），兩者的對比就是這個世界的聲音：一個人的名字很重，日常的話很軟。\n\n密度寬鬆。版面元素是圓角小面板、膠囊形按鈕和點狀虛線分隔，深度只靠柔和的暖色陰影與物件浮起，沒有硬邊投影、沒有玻璃質感。",
+    "keyCharacteristics": [
+      "程式繪製的等角房間是首頁主角，作品＝房間物件，每件都有常駐名牌",
+      "燕麥／瓷白紙底，帶 22px 間距的淡褐點陣底紋",
+      "四個粉彩房間色，各有一個淺色（soft）與一個深色（deep）用於文字",
+      "粗襯線大字 ＋ 圓潤黑體內文",
+      "點狀虛線取代實線分隔",
+      "圓角一切：面板 24px、名牌 12px、按鈕與標籤全膠囊"
+    ],
+    "rules": [
+      { "name": "The Four Room Colors Rule", "body": "介面只有四個色系：Sage、Blush、Rain、Acorn。每個色系的「深色」只拿來當文字或外框，「淺色」只拿來當底。新增顏色前先試著用這四個。", "section": "colors" },
+      { "name": "The Diary Is Pink Rule", "body": "腮紅粉屬於日記。日記面板、日記內頁（`tone=\"blush\"`）、「全部日記」都是粉的；作品相關的介面（技術標籤、導覽目前頁）是綠的。", "section": "colors" },
+      { "name": "The Warm Ink Rule", "body": "文字不用黑色也不用灰色，一律從 Ink、Ink Soft、Ink Faint 三階暖褐中選。", "section": "colors" },
+      { "name": "The Serif For Names Rule", "body": "有「名字」性質的文字（站主名字、作品名、日記標題、名牌、年份）用 Noto Serif TC；其他所有文字，包括面板標題，都用 Huninn 400。", "section": "typography" },
+      { "name": "The No Bold Body Rule", "body": "Huninn 只載入 400，不做假粗體；要強調就換成襯線字或換顏色。", "section": "typography" },
+      { "name": "The Paper On A Desk Rule", "body": "陰影只用暖褐、只向下、只柔和。沒有硬邊偏移投影、沒有冷灰陰影、沒有模糊玻璃。", "section": "elevation" },
+      { "name": "The Room Lifts, Others Fade Rule", "body": "停在一件作品上時，那件物件浮起 7px、名牌展開技術與年份，其他物件淡到 0.5、其他名牌淡到 0.55。減少動態設定時只保留透明度與外框的變化，不位移。", "section": "elevation" }
+    ],
+    "dos": [
+      "**Do** 把新作品放進房間的物件槽，並同時列在下方的純文字作品清單；超過六件只進清單。",
+      "**Do** 用點狀虛線（radial-gradient，8px 間距）分隔，而不是實線。",
+      "**Do** 外框一律 1.5px，面板 24px 圓角，按鈕與標籤用膠囊。",
+      "**Do** 日記相關介面用腮紅粉系，作品相關介面用鼠尾草綠系。",
+      "**Do** 新增房間物件時沿用三面配色方塊與 1.4px `#7a5f43` 描邊。",
+      "**Do** 所有動態使用 `--ease-out`（cubic-bezier(0.16, 1, 0.3, 1)），並在 prefers-reduced-motion 下取消位移。",
+      "**Do** 佔位內容一律掛上「範例」標記。"
+    ],
+    "donts": [
+      "**Don't** 把作品排成卡片網格放在首頁第一屏；作品是房間裡的物件。",
+      "**Don't** 用純黑、冷灰或高彩度的顏色；文字只用三階暖褐。",
+      "**Don't** 用硬邊偏移陰影或冷色陰影。",
+      "**Don't** 用圖示字型或 emoji 當圖示；圖示是自繪的 1.75 線寬 SVG。",
+      "**Don't** 放上沒有真實資料來源的訪客數、積分或留言板；迷你小窩式的計數器只有在真的接上資料後才能出現（目前是靜態網站）。"
+    ]
+  }
+}
