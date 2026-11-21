@@ -37,12 +37,16 @@ const latest = diary.slice(0, 3);
   <section class="home wrap" aria-labelledby="site-name">
     <div class="intro">
       <h1 id="site-name">{site.name}</h1>
-      <p class="lede">{site.intro}</p>
-      <p class="hint">
-        <Icon name="arrow" size={16} />
-        點房間裡的東西，看那件作品。
-        <a class="list-link" href="#works">或直接看作品清單</a>
-      </p>
+      <div class="intro-text">
+        <p class="lede">{site.intro}</p>
+        <p class="hint">
+          <span class="hint-main">
+            <Icon name="arrow" size={16} />
+            點房間裡的東西，看那件作品。
+          </span>
+          <a class="list-link" href="#works">或直接看作品清單</a>
+        </p>
+      </div>
     </div>
 
     <div class="room-wrap">
@@ -154,16 +158,22 @@ const latest = diary.slice(0, 3);
     padding-top: var(--space-2);
   }
 
+  /* 名字短時，介紹排在名字右邊；名字太長放不下時，介紹自動換到名字下面 */
   .intro {
     grid-area: intro;
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
     column-gap: var(--space-6);
-    align-items: end;
+    row-gap: var(--space-3);
+  }
+
+  .intro-text {
+    flex: 1 1 22em;
+    padding-bottom: 0.35em;
   }
 
   h1 {
-    grid-row: span 2;
     font-size: clamp(2.75rem, 1.6rem + 3.2vw, 4.75rem);
     letter-spacing: 0.02em;
     line-height: 1.05;
@@ -181,15 +191,20 @@ const latest = diary.slice(0, 3);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    column-gap: var(--space-2);
+    column-gap: var(--space-4);
     margin-top: var(--space-2);
     color: var(--sage-deep);
     font-size: 0.9375rem;
     line-height: 1.6;
   }
 
+  .hint-main {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
   .list-link {
-    margin-left: var(--space-3);
     color: var(--ink-soft);
   }
 
@@ -463,16 +478,6 @@ const latest = diary.slice(0, 3);
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas: 'intro' 'room' 'side';
       row-gap: var(--space-5);
-    }
-    .intro {
-      grid-template-columns: minmax(0, 1fr);
-      row-gap: var(--space-4);
-    }
-    h1 {
-      grid-row: auto;
-    }
-    .list-link {
-      margin-left: 0;
     }
     .work {
       grid-template-columns: 3.5rem minmax(0, 1fr);
