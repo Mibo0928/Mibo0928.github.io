@@ -1,5 +1,33 @@
 ---
-// 作品沒有獨立的列表頁：直接帶到首頁的作品清單
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-return Astro.redirect(`${base}/#works`);
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import WorkList from '../../components/WorkList.astro';
+
+const works = (await getCollection('works')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
+
+<Base title="作品" current="works">
+  <section class="wrap page">
+    <h1>作品</h1>
+    <p class="lede">做過的東西，一共 {works.length} 件，新的在前面。</p>
+    <div class="list">
+      <WorkList works={works} itemHeading="h2" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page {
+    padding-top: var(--space-6);
+  }
+  h1 {
+    font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.5rem);
+  }
+  .lede {
+    margin-top: var(--space-3);
+    color: var(--ink-soft);
+  }
+  .list {
+    margin-top: var(--space-7);
+  }
+</style>
