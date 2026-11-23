@@ -7,16 +7,20 @@ export const roomObjects = ['computer', 'poster', 'bookshelf', 'notebook', 'came
 
 const works = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/works' }),
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    date: z.coerce.date(),
-    tech: z.array(z.string()).default([]),
-    roomObject: z.enum(roomObjects).optional(),
-    demo: z.string().url().optional(),
-    repo: z.string().url().optional(),
-    placeholder: z.boolean().default(false),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      summary: z.string(),
+      date: z.coerce.date(),
+      tech: z.array(z.string()).default([]),
+      roomObject: z.enum(roomObjects).optional(),
+      demo: z.string().url().optional(),
+      repo: z.string().url().optional(),
+      // 作品頁最上面的主圖（截圖），會立即載入；coverAlt 是給看不到圖的人的文字說明
+      cover: image().optional(),
+      coverAlt: z.string().optional(),
+      placeholder: z.boolean().default(false),
+    }),
 });
 
 const diary = defineCollection({

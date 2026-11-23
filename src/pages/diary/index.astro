@@ -61,13 +61,20 @@ const fmt = (d: Date) =>
     background: var(--porcelain);
     border: 1.5px solid var(--line);
     text-decoration: none;
-    transition:
-      border-color 0.25s var(--ease-out),
-      transform 0.35s var(--ease-out);
+    transition: border-color 0.25s var(--ease-out);
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        border-color 0.25s var(--ease-out),
+        transform 0.35s var(--ease-out);
+    }
   }
   .entries a:hover {
     border-color: var(--blush);
-    transform: translateY(-2px);
+
+    @media (prefers-reduced-motion: no-preference) {
+      transform: translateY(-2px);
+    }
   }
   time {
     grid-row: span 2;

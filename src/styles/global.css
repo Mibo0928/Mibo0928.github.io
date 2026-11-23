@@ -58,7 +58,10 @@
 
 html {
   background: var(--oat);
-  scrollbar-color: var(--sage) var(--oat);
+  /* 捲軸：拖曳塊和軌道的對比至少 3:1（橡實褐對燕麥色約 4.25:1） */
+  --scrollbar-thumb: var(--acorn);
+  --scrollbar-track: var(--oat);
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -150,14 +153,4 @@ svg {
   height: 2px;
   margin: 0;
   background: radial-gradient(circle, var(--line) 1px, transparent 1.5px) 0 0 / 8px 2px repeat-x;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-delay: 0ms !important;
-    transition-duration: 0.01ms !important;
-  }
 }

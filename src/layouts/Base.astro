@@ -140,10 +140,14 @@ const hasContact = Boolean(site.contact.email || site.contact.github);
     color: var(--ink);
   }
 
+  /* 目前所在的頁面：深綠外框（對比約 5:1）加底線，不只靠顏色區分 */
   nav a[aria-current='page'] {
     background: var(--moss);
-    border-color: var(--sage);
+    border-color: var(--sage-deep);
     color: var(--sage-deep);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.3em;
   }
 
   .footer {

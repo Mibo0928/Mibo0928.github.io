@@ -428,6 +428,22 @@ const stroke = { stroke: '#7a5f43', 'stroke-width': 1.4, 'stroke-linejoin': 'rou
 
 <Fragment set:html={`<style>${linkCss}</style>`} />
 
+<script>
+  // 用滑鼠點房間裡的作品物件，就進到那件作品的頁面。
+  // 鍵盤和螢幕閱讀器使用者用的是名牌連結，所以物件本身不需要能被 Tab 選到。
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const obj = target.closest<SVGGElement>('.room .obj-link[data-href]');
+    if (!obj?.dataset.href) return;
+    if (event.ctrlKey || event.metaKey) {
+      window.open(obj.dataset.href, '_blank', 'noopener');
+    } else {
+      window.location.href = obj.dataset.href;
+    }
+  });
+</script>
+
 <style>
   .room {
     position: relative;
@@ -441,16 +457,21 @@ const stroke = { stroke: '#7a5f43', 'stroke-width': 1.4, 'stroke-linejoin': 'rou
     overflow: visible;
   }
 
+  /* 變淡（透明度）一律保留；落下進場和浮起這類移動，只在使用者沒有要求「減少動態」時才播放 */
   .room :global(.obj) {
-    transition:
-      transform 0.45s var(--ease-out),
-      opacity 0.35s var(--ease-out),
-      filter 0.45s var(--ease-out);
-    animation: settle 0.9s var(--ease-out) backwards;
-    animation-delay: calc(0.12s + var(--i) * 0.09s);
+    transition: opacity 0.35s var(--ease-out);
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        transform 0.45s var(--ease-out),
+        opacity 0.35s var(--ease-out),
+        filter 0.45s var(--ease-out);
+      animation: settle 0.9s var(--ease-out) backwards;
+      animation-delay: calc(0.12s + var(--i) * 0.09s);
+    }
   }
 
-  .room :global(a.obj-link) {
+  .room :global(.obj-link) {
     cursor: pointer;
   }
 

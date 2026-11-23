@@ -12,3 +12,4 @@ dist/
 .impeccable/reference/
 .impeccable/mocks/
 .impeccable/hook.cache.json
+skills-lock.json

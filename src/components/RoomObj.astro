@@ -1,5 +1,7 @@
 ---
-// 房間裡的一個物件。有分配到作品就變成可以點的連結（鍵盤焦點交給名牌，所以這裡不能用 Tab 選到）。
+// 房間裡的一個物件。整張房間圖對螢幕閱讀器是隱藏的，所以這裡不放連結：
+// 有分配到作品的物件只是「用滑鼠點也能進作品頁」的捷徑（由 Room.astro 的小程式處理），
+// 鍵盤和螢幕閱讀器使用者用的是旁邊的名牌連結，兩者連到同一頁。
 interface Props {
   slot: string;
   work?: { href: string; title: string };
@@ -8,14 +10,11 @@ interface Props {
 const { slot, work, i } = Astro.props;
 ---
 
-{work ? (
-  <a href={work.href} class="obj-link" tabindex="-1" aria-hidden="true">
-    <g class="obj" data-slot={slot} style={`--i:${i}`}>
-      <slot />
-    </g>
-  </a>
-) : (
-  <g class="obj obj-decor" data-slot={slot} style={`--i:${i}`}>
-    <slot />
-  </g>
-)}
+<g
+  class:list={['obj', work ? 'obj-link' : 'obj-decor']}
+  data-slot={slot}
+  data-href={work?.href}
+  style={`--i:${i}`}
+>
+  <slot />
+</g>

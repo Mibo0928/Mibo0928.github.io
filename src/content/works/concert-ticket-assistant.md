@@ -5,9 +5,9 @@ date: 2026-08-28
 tech: [Python, SQLite, Requests, BeautifulSoup]
 roomObject: poster
 repo: https://github.com/Mibo0928/concert-ticket-assistant
+cover: ../../assets/works/concert-ticket-assistant.png
+coverAlt: 演唱會售票助手的執行畫面：終端機裡的選單，有搜尋歌手、管理追蹤歌手、更新追蹤歌手、離開四個選項
 ---
-
-![演唱會售票助手的執行畫面：終端機裡的選單，有搜尋歌手、管理追蹤歌手、更新追蹤歌手、離開四個選項](../../assets/works/concert-ticket-assistant.png)
 
 這是在終端機裡執行的程式，還沒有網頁版，自己的第一個小作品以後有時間再更新。
 
